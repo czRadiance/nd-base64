@@ -1,0 +1,22 @@
+{
+  "name": "nd-base64",
+  "version": "1.0.0",
+  "description": "提供在浏览器上可使用的BASE64与String之间的编码与解码",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/czRadiance/nd-base64.git"
+  },
+  "keywords": [
+    "base64"
+  ],
+  "author": "czRadiance <czRadiance@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/czRadiance/nd-base64/issues"
+  },
+  "homepage": "https://github.com/czRadiance/nd-base64#readme"
+}
