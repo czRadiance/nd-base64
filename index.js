@@ -1,4 +1,4 @@
-const BASE64_MAPPING = [
+var BASE64_MAPPING = [
   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
   'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
   'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
@@ -12,10 +12,10 @@ const BASE64_MAPPING = [
 /**
  *ascii convert to binary
   */
-const _toBinary = ascii => {
-  const binary = []
+var  _toBinary = function(ascii) {
+  var  binary = []
   while (ascii > 0) {
-    const b = ascii % 2
+    var  b = ascii % 2
     ascii = Math.floor(ascii / 2)
     binary.push(b)
   }
@@ -26,11 +26,11 @@ const _toBinary = ascii => {
 /**
  *binary convert to decimal
   */
-const _toDecimal = binary => {
-  let dec = 0
-  let p = 0
-  for (let i = binary.length - 1; i >= 0; --i) {
-    const b = binary[i]
+var  _toDecimal = function(binary) {
+  var  dec = 0
+  var  p = 0
+  for (var  i = binary.length - 1; i >= 0; --i) {
+    var  b = binary[i]
     if (b === 1) {
       dec += Math.pow(2, p)
     }
@@ -42,29 +42,29 @@ const _toDecimal = binary => {
 /**
  *unicode convert to utf-8
   */
-const _toUTF8Binary = (c, binaryArray) => {
-  const mustLen = (8 - (c + 1)) + ((c - 1) * 6)
-  const fatLen = binaryArray.length
-  let diff = mustLen - fatLen
+var  _toUTF8Binary = function(c, binaryArray) {
+  var  mustLen = (8 - (c + 1)) + ((c - 1) * 6)
+  var  fatLen = binaryArray.length
+  var  diff = mustLen - fatLen
   while (--diff >= 0) {
     binaryArray.unshift(0)
   }
-  const binary = []
-  let _c = c
+  var  binary = []
+  var  _c = c
   while (--_c >= 0) {
     binary.push(1)
   }
   binary.push(0)
-  let i = 0
-  const len = 8 - (c + 1)
+  var  i = 0
+  var  len = 8 - (c + 1)
   for (; i < len; ++i) {
     binary.push(binaryArray[i])
   }
 
-  for (let j = 0; j < c - 1; ++j) {
+  for (var  j = 0; j < c - 1; ++j) {
     binary.push(1)
     binary.push(0)
-    let sum = 6
+    var  sum = 6
     while (--sum >= 0) {
       binary.push(binaryArray[i++])
     }
@@ -75,11 +75,11 @@ const _toUTF8Binary = (c, binaryArray) => {
 /**
  *unit8array convert to string
   */
-const _UTF8ArrayToStr = array => {
-  let out = ''
-  let i = 0
-  let c, char2, char3
-  const len = array.length
+var  _UTF8ArrayToStr = function(array) {
+  var  out = ''
+  var  i = 0
+  var  c, char2, char3
+  var  len = array.length
 
   while (i < len) {
     c = array[i++]
@@ -111,14 +111,14 @@ module.exports = {
   /**
    *BASE64 Encode
     */
-  encoder: str => {
-    const base64_Index = []
-    let binaryArray = []
-    for (let i = 0, len = str.length; i < len; ++i) {
-      const unicode = str.charCodeAt(i)
-      const _tmpBinary = _toBinary(unicode)
+  encoder: function(str) {
+    var  base64_Index = []
+    var  binaryArray = []
+    for (var  i = 0, len = str.length; i < len; ++i) {
+      var  unicode = str.charCodeAt(i)
+      var  _tmpBinary = _toBinary(unicode)
       if (unicode < 0x80) {
-        let _tmpdiff = 8 - _tmpBinary.length
+        var  _tmpdiff = 8 - _tmpBinary.length
         while (--_tmpdiff >= 0) {
           _tmpBinary.unshift(0)
         }
@@ -136,28 +136,28 @@ module.exports = {
       }
     }
 
-    let extra_Zero_Count = 0
-    for (let i = 0, len = binaryArray.length; i < len; i += 6) {
-      const diff = (i + 6) - len
+    var  extra_Zero_Count = 0
+    for (i = 0, len = binaryArray.length; i < len; i += 6) {
+      var  diff = (i + 6) - len
 
       if (diff === 2) {
         extra_Zero_Count = 2
       } else if (diff === 4) {
         extra_Zero_Count = 4
       }
-      let _tmpExtra_Zero_Count = extra_Zero_Count
+      var  _tmpExtra_Zero_Count = extra_Zero_Count
       while (--_tmpExtra_Zero_Count >= 0) {
         binaryArray.push(0)
       }
       base64_Index.push(_toDecimal(binaryArray.slice(i, i + 6)))
     }
 
-    let base64 = ''
-    for (let i = 0, len = base64_Index.length; i < len; ++i) {
+    var  base64 = ''
+    for (i = 0, len = base64_Index.length; i < len; ++i) {
       base64 += BASE64_MAPPING[base64_Index[i]]
     }
 
-    for (let i = 0, len = extra_Zero_Count / 2; i < len; ++i) {
+    for (i = 0, len = extra_Zero_Count / 2; i < len; ++i) {
       base64 += '='
     }
     return base64
@@ -165,9 +165,9 @@ module.exports = {
   /**
    *BASE64  Decode for UTF-8
     */
-  decoder: _base64Str => {
-    const _len = _base64Str.length
-    let extra_Zero_Count = 0
+  decoder: function(_base64Str) {
+    var  _len = _base64Str.length
+    var  extra_Zero_Count = 0
     /**
      *计算在进行BASE64编码的时候，补了几个0
       */
@@ -183,16 +183,16 @@ module.exports = {
       }
     }
 
-    let binaryArray = []
-    for (let i = 0, len = _base64Str.length; i < len; ++i) {
-      const c = _base64Str.charAt(i)
-      for (let j = 0, size = BASE64_MAPPING.length; j < size; ++j) {
+    var  binaryArray = []
+    for (var  i = 0, len = _base64Str.length; i < len; ++i) {
+      var  c = _base64Str.charAt(i)
+      for (var  j = 0, size = BASE64_MAPPING.length; j < size; ++j) {
         if (c === BASE64_MAPPING[j]) {
-          const _tmp = _toBinary(j)
+          var  _tmp = _toBinary(j)
           // 不足6位的补0
-          const _tmpLen = _tmp.length
+          var  _tmpLen = _tmp.length
           if (6 - _tmpLen > 0) {
-            for (let k = 6 - _tmpLen; k > 0; --k) {
+            for (var  k = 6 - _tmpLen; k > 0; --k) {
               _tmp.unshift(0)
             }
           }
@@ -206,14 +206,14 @@ module.exports = {
       binaryArray = binaryArray.slice(0, binaryArray.length - extra_Zero_Count)
     }
 
-    let unicode = []
-    let unicodeBinary = []
-    for (let i = 0, len = binaryArray.length; i < len;) {
+    var  unicode = []
+    var  unicodeBinary = []
+    for (i = 0, len = binaryArray.length; i < len;) {
       if (binaryArray[i] === 0) {
         unicode = unicode.concat(_toDecimal(binaryArray.slice(i, i + 8)))
         i += 8
       } else {
-        let sum = 0
+        var  sum = 0
         while (i < len) {
           if (binaryArray[i] === 1) {
             ++sum

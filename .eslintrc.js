@@ -1,8 +1,7 @@
 module.exports = {
     "env": {
         "browser": true,
-        "commonjs": true,
-        "es6": true
+        "commonjs": true
     },
     "extends": "eslint:recommended",
     "parserOptions": {
@@ -31,7 +30,6 @@ module.exports = {
       "no-this-before-super": 2,
       "no-unexpected-multiline": 2,
       "no-undef": 2,
-      "no-var": 2,
       "no-warning-comments": 1,
       "no-throw-literal": 0,
       "no-unused-expressions": 0,
